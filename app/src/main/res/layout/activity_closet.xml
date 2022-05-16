@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <TextView
+        android:id="@+id/closet_back"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/closet_top"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="뒤로 가기"
+        android:background="@drawable/square_background_black_round_white"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:textAlignment="center"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/closet_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/closet_back"
+        app:layout_constraintBottom_toTopOf="@id/closet_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="상의"
+        android:background="@drawable/square_background_black_round_white"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:textAlignment="center"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/closet_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/closet_top"
+        app:layout_constraintBottom_toTopOf="@id/closet_shoes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="하의"
+        android:background="@drawable/square_background_black_round_white"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:textAlignment="center"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/closet_shoes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/closet_bottom"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="신발"
+        android:background="@drawable/square_background_black_round_white"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:textAlignment="center"
+        android:gravity="center"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
