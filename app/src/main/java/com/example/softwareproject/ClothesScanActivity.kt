@@ -1,5 +1,6 @@
 package com.example.softwareproject
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.softwareproject.databinding.ActivityClothesScanBinding
@@ -16,5 +17,18 @@ class ClothesScanActivity : AppCompatActivity() {
         binding.clothesScanBack.setOnClickListener {
             finish()
         }
+
+        binding.clothesScanPicture.setOnClickListener {
+            val intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.clothesScanGallery.setOnClickListener {
+            val intent = Intent(this, GalleryActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }
+
+
