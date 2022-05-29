@@ -1,71 +1,79 @@
 package com.example.softwareproject
 
-import android.net.Uri
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
-import android.os.Environment
-import android.widget.Toast
+import android.provider.MediaStore
+import android.util.Base64
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
+import com.example.softwareproject.api.ClothesAPI
 import com.example.softwareproject.databinding.ActivityCameraBinding
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
-import java.io.File
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.ByteArrayOutputStream
+
 
 class CameraActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCameraBinding
-
-    private var tempImageUri: Uri? = null
-    private var tempImageFilePath = ""
-    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()){ success ->
-
-        if (success){
-            binding.cameraIv.setImageURI(tempImageUri)
-        }
-
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCameraBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setPermission()
-
         binding.cameraShootTv.setOnClickListener {
-
-            tempImageUri = FileProvider.getUriForFile(this,
-                "com.example.softwareproject.provider", createImageFile().also {
-                    tempImageFilePath = it.absolutePath
-            })
-            cameraLauncher.launch(tempImageUri)
+            val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            if(intent.resolveActivity(packageManager) != null){
+                getAction.launch(intent)
+            }
         }
     }
 
-    private fun setPermission() {
-      val permission = object : PermissionListener {
-          override fun onPermissionGranted() {
-              Toast.makeText(this@CameraActivity, "권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
-          }
+    val getAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        val bitmap = it?.data?.extras?.get("data") as Bitmap
+        binding.cameraIv.setImageBitmap(bitmap)
+        val push = encodeImage(bitmap).toString()
+        Log.d("태그", push)
 
-          override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
-              Toast.makeText(this@CameraActivity, "권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
-          }
-      }
+        val gson : Gson = GsonBuilder().setLenient().create()
 
-      TedPermission.with(this)
-          .setPermissionListener(permission)
-          .setRationaleMessage("카메라를 사용하시려면 권한을 허용해주세요.")
-          .setDeniedMessage("권한을 거부하였습니다. [앱 설정] -> [권한] 항목에서 허용해주새요.")
-          .setPermissions(android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.CAMERA)
-          .check()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("")
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+
+        val clothesAPI = retrofit.create(ClothesAPI::class.java)
+
+        val data = Clothes(push)
+        clothesAPI.postClothes(data).enqueue(object : Callback<ClothesResponse>{
+            override fun onResponse(
+                call: Call<ClothesResponse>,
+                response: Response<ClothesResponse>
+            ) {
+                Log.d("log",response.toString())
+            }
+
+            override fun onFailure(call: Call<ClothesResponse>, t: Throwable) {
+                Log.d("log",t.message.toString())
+            }
+
+        })
+
     }
 
-    private fun createImageFile(): File {
-
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile("temp_image", ".jpg", storageDir)
-
+    private fun encodeImage(bitmap: Bitmap):String? {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val b = baos.toByteArray()
+        return Base64.encodeToString(b,Base64.DEFAULT)
     }
+
 }

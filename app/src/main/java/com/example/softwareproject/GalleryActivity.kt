@@ -26,6 +26,8 @@ class GalleryActivity : AppCompatActivity() {
         binding.galleryShootTv.setOnClickListener {
             selectPictureLauncher.launch("image/")
         }
+
+
     }
 
     private fun setPermission() {
