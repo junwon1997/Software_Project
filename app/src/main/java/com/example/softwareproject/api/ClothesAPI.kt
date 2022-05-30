@@ -11,7 +11,7 @@ import retrofit2.http.Part
 
 interface ClothesAPI{
 
-    @POST("/clothes/image")
+    @POST("/clothes/test_image/1")
     fun postClothes(@Body clothes: Clothes):Call<ClothesResponse>
 
 }

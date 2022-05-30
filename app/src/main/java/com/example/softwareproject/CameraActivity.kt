@@ -12,6 +12,7 @@ import com.example.softwareproject.api.ClothesAPI
 import com.example.softwareproject.databinding.ActivityCameraBinding
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import org.json.JSONArray
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,8 +20,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 
-
-class CameraActivity : AppCompatActivity() {
+class CameraActivity :AppCompatActivity() {
 
     lateinit var binding: ActivityCameraBinding
 
@@ -31,38 +31,38 @@ class CameraActivity : AppCompatActivity() {
 
         binding.cameraShootTv.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if(intent.resolveActivity(packageManager) != null){
-                getAction.launch(intent)
-            }
+            Log.d("카메라", intent.toString())
+            getAction.launch(intent)
         }
+
     }
 
-    val getAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    val getAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
         val bitmap = it?.data?.extras?.get("data") as Bitmap
         binding.cameraIv.setImageBitmap(bitmap)
         val push = encodeImage(bitmap).toString()
-        Log.d("태그", push)
+        Log.d("카메라이미지",push)
 
         val gson : Gson = GsonBuilder().setLenient().create()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("")
+            .baseUrl("http://54.180.122.213:8080")
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
 
         val clothesAPI = retrofit.create(ClothesAPI::class.java)
 
         val data = Clothes(push)
-        clothesAPI.postClothes(data).enqueue(object : Callback<ClothesResponse>{
+        clothesAPI.postClothes(data).enqueue(object : Callback<ClothesResponse> {
             override fun onResponse(
                 call: Call<ClothesResponse>,
                 response: Response<ClothesResponse>
             ) {
-                Log.d("log",response.toString())
+                Log.d("이미지 정보 가져오기 성공",response.body()?.color.toString())
             }
 
             override fun onFailure(call: Call<ClothesResponse>, t: Throwable) {
-                Log.d("log",t.message.toString())
+                Log.d("이미지 정보 가져오기 실패",t.message.toString())
             }
 
         })
@@ -75,5 +75,4 @@ class CameraActivity : AppCompatActivity() {
         val b = baos.toByteArray()
         return Base64.encodeToString(b,Base64.DEFAULT)
     }
-
 }
