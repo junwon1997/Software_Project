@@ -1,5 +1,6 @@
 package com.example.softwareproject
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,16 @@ class ClosetActivity : AppCompatActivity() {
 
         binding.closetBack.setOnClickListener {
             finish()
+        }
+
+        binding.closetTop.setOnClickListener {
+            val intent = Intent(this, ClosetTopActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.closetBottom.setOnClickListener {
+            val intent = Intent(this,ClosetBottomActivity::class.java)
+            startActivity(intent)
         }
     }
 }

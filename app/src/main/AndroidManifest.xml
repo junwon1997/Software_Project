@@ -33,8 +33,14 @@
         <activity android:name=".ClosetActivity"/>
         <activity android:name=".ClothesRecommendActivity"/>
         <activity android:name=".ClothesScanActivity"/>
-        <activity android:name=".CameraActivity"/>
-        <activity android:name=".GalleryActivity"/>
+        <activity android:name=".CameraTopActivity"/>
+        <activity android:name=".GalleryTopActivity"/>
+        <activity android:name=".GalleryBottomActivity"/>
+        <activity android:name=".GalleryCategoryActivity"/>
+        <activity android:name=".CameraBottomActivity"/>
+        <activity android:name=".CameraCategoryActivity"/>
+        <activity android:name=".ClosetTopActivity"/>
+        <activity android:name=".ClosetBottomActivity"/>
 
         <provider
             android:authorities="${applicationId}.provider"

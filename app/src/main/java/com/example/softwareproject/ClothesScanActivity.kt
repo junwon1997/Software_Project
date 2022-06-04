@@ -19,12 +19,12 @@ class ClothesScanActivity : AppCompatActivity() {
         }
 
         binding.clothesScanPicture.setOnClickListener {
-            val intent = Intent(this, CameraActivity::class.java)
+            val intent = Intent(this, CameraCategoryActivity::class.java)
             startActivity(intent)
         }
 
         binding.clothesScanGallery.setOnClickListener {
-            val intent = Intent(this, GalleryActivity::class.java)
+            val intent = Intent(this, GalleryCategoryActivity::class.java)
             startActivity(intent)
         }
 
